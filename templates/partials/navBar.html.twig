@@ -1,32 +1,42 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#"><img src="/img/logo.png" alt="Acceuil" width="150px"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<header id="header">
 
-    <div class="collapse navbar-collapse" id="navbarColor03">
-        <ul class="navbar-nav mr-auto ml-auto">
+    <div id="header-wrap">
 
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="" class="nav-link">Inscription</a>
-                </li>
-                <li class="nav-item">
-                    <a href="" class="nav-link">Connexion</a>
-                </li>
-        </ul>
+        <div class="container clearfix">
+
+            <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
+
+            <!-- Logo
+            ============================================= -->
+            <div id="logo">
+                <a href="{{ path('homepage') }}" class="standard-logo"><img src="/img/logo.png" alt="Logo EMS"></a>
+                <a href="{{ path('homepage') }}" class="retina-logo"><img src="/img/logo.png" alt="Logo EMS"></a>
+            </div><!-- #logo end -->
+
+            <!-- Primary Navigation
+            ============================================= -->
+            <nav id="primary-menu" class="style-3">
+
+                <ul>
+                    <li class="current"><a href="#"><div>Acceuil</div></a></li>
+                    <li><a href="demos/medical/about-us.html"><div>About Us</div></a></li>
+                    <li><a href="demos/medical/departments.html"><div>Departments</div></a></li>
+                    <li><a href="demos/medical/appointment.html"><div>Appointment</div></a></li>
+                    <li><a href="demos/medical/doctors.html"><div>Doctors</div></a>
+                        <ul>
+                            <li><a href="demos/medical/doctors-lists.html"><div>2 columns - List style</div></a></li>
+                            <li><a href="demos/medical/doctors-3.html"><div>3 columns</div></a></li>
+                            <li><a href="demos/medical/doctors.html"><div>4 columns</div></a></li>
+                        </ul>
+                    </li>
+                    <li><a href="demos/medical/blog.html"><div>Blog</div></a></li>
+                    <li><a href="demos/medical/contact.html"><div>Contact</div></a></li>
+                </ul>
+
+            </nav><!-- #primary-menu end -->
+
+        </div>
+
     </div>
-</nav>
+
+</header><!-- #header end -->
