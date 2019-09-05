@@ -49,6 +49,18 @@
                                 <div class="row">
                                     <h4 class="col"><span>Mutuelle : </span>{{ client.mutuelle.nom }}</h4>
                                     <h4 class="col"><span>Intervention réstante : </span>{{ client.nbInter }}</h4>
+
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-secondary button-mini dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Souscription mutuelle
+                                        </button>
+                                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                            {% for mutuelle in mutuelleList %}
+                                                <a class="dropdown-item" href="{{ path('suscription', {'id': client.id, 'mutuelle': mutuelle.nom}) }}">{{ mutuelle.nom }}</a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

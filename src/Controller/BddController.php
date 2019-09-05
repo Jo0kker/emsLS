@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Clients;
-use App\Entity\Intervention;
+use App\Entity\Mutuelle;
+use App\Entity\Users;
 use App\Form\AddClientType;
+use App\Entity\Intervention;
 use App\Form\AddInterventionType;
 use App\Repository\ClientsRepository;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\MutuelleRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BddController extends AbstractController
 {
@@ -19,6 +22,15 @@ class BddController extends AbstractController
      */
     public function index(ClientsRepository $repoClients)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $clientList = $repoClients->findAll();
 
         return $this->render('bdd/index.html.twig', [
@@ -34,6 +46,15 @@ class BddController extends AbstractController
      */
     public function addBdd(Request $request, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $client = new Clients();
         $form = $this->createForm(AddClientType::class, $client);
         $form->handleRequest($request);
@@ -58,8 +79,17 @@ class BddController extends AbstractController
      * @param Request $request
      * @param ObjectManager $
      */
-    public function showBdd(Clients $clients, Request $request, ObjectManager $manager)
+    public function showBdd(Clients $clients, Request $request, ObjectManager $manager, MutuelleRepository $repoMutuelle)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $medic = $this->getUser();
         $inter = new Intervention();
         $form = $this->createForm(AddInterventionType::class, $inter);
@@ -100,7 +130,49 @@ class BddController extends AbstractController
         }
         return $this->render('bdd/showBdd.html.twig', [
             'client' => $clients,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'mutuelleList' => $repoMutuelle->findAll()
         ]);
+    }
+
+    /**
+     * @Route("/addClientMutuelle/{id}", name="suscription")
+     * @param Users $user
+     * @param ObjectManager $manager
+     * @param MutuelleRepository $mutuelleRepo
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addMutuelle (Clients $clients, ObjectManager $manager, MutuelleRepository $mutuelleRepo, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
+
+        $getParam = $request->query->get('mutuelle');
+        $mutuelleList = $mutuelleRepo->findOneBy(['nom' => $getParam]);
+        if (empty($mutuelleList)) {
+            $this->addFlash(
+                'warning',
+                'Mutuelle introuvable'
+            );
+            dump($getParam);
+            return $this->redirectToRoute('bdd_index');
+        }
+
+        $mutuelleCible = $this->getDoctrine()->getManager()->getRepository(Mutuelle::class)->findOneBy(['nom'=>$getParam]);
+        $oldInter = $clients->getNbInter();
+        $newInter = $oldInter + $mutuelleCible->getNbInter();
+        $clients->setMutuelle($mutuelleCible);
+        $clients->setNbInter($newInter);
+        $manager->persist($clients);
+        $manager->flush();
+        return $this->redirectToRoute('show_bdd', ['id'=> $clients->getId()]);
     }
 }

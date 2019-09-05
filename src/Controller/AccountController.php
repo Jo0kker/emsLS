@@ -89,10 +89,14 @@ class AccountController extends AbstractController
     /**
      * @Route("/profil", name="profil")
      * 
-     *
      */
     public function profil(Request $request, ObjectManager $manager, UserPasswordEncoderInterface $encoder)
     {
+        try {
+            $currentRoles = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
         $user = $this->getUser();
         $form = $this->createForm(ProfilType::class, $user);
         $form->handleRequest($request);
@@ -122,8 +126,15 @@ class AccountController extends AbstractController
      */
     public function userAccesss(UsersRepository $repository)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
         $userList = $repository->findCivil('Civil');
-        dump($userList);
         return $this->render('/account/userAccess.html.twig', [
             'usersList' => $userList
         ]);
@@ -134,6 +145,15 @@ class AccountController extends AbstractController
      */
     public function grantAccess(Users $user, ObjectManager $manager, RoleRepository $roleRepository)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $lowRole = $this->getDoctrine()->getManager()->getRepository(Role::class)->findOneBy(['title'=>'employe']);
         $oldRole = $this->getDoctrine()->getManager()->getRepository(Role::class)->findOneBy(['title'=>'Civil']);
         $user->addUserRole($lowRole);
@@ -152,6 +172,15 @@ class AccountController extends AbstractController
      */
     public function delAccess(Users $user, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $manager->remove($user);
         $manager->flush();
         $this->addFlash(
@@ -170,6 +199,15 @@ class AccountController extends AbstractController
      */
     public function gradeAccess(Request $request, ObjectManager $manager, RoleRepository $repo): Response
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $menuAccess = $repo->findPatron();
         $grade = new Role();
         $form = $this->createForm(RoleAddType::class, $grade);
@@ -199,6 +237,15 @@ class AccountController extends AbstractController
      */
     public function addRangAccess(Role $role, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $rangPatron = $this->getDoctrine()->getManager()->getRepository(MenuAccess::class)->findOneBy(['Route'=>'Patron']);
         $role->setMenuAccess($rangPatron);
         $manager->persist($role);
@@ -215,6 +262,15 @@ class AccountController extends AbstractController
      */
     public function removeRangAccess(Role $role, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $rangPatron = $this->getDoctrine()->getManager()->getRepository(MenuAccess::class)->findOneBy(['Route'=>'Patron']);
         $role->setMenuAccess(null);
         $manager->persist($role);
@@ -227,6 +283,15 @@ class AccountController extends AbstractController
      */
     public function upRang(Role $role, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $oldRang = $role->getRang();
         $newRang = $oldRang + 1;
         $role->setRang($newRang);
@@ -243,6 +308,15 @@ class AccountController extends AbstractController
      */
     public function downRang(Role $role, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $oldRang = $role->getRang();
         $newRang = $oldRang - 1;
         $role->setRang($newRang);
@@ -259,6 +333,15 @@ class AccountController extends AbstractController
      */
     public function delRang(Role $role, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if ($role->getTitle() == 'Patron') {
             $this->addFlash('danger', 'Impossible de supprimer le role');
             return $this->redirectToRoute('gradeAccess');
@@ -275,6 +358,15 @@ class AccountController extends AbstractController
      */
     public function meetList(MeetRepository $repo)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $meelList = $repo->findAll();
         return $this->render('/account/meetList.html.twig', [
             'meetList' => $meelList
@@ -288,6 +380,15 @@ class AccountController extends AbstractController
      */
     public function delMeet(Meet $meet, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $manager->remove($meet);
         $manager->flush();
         return $this->redirectToRoute('meetList');
@@ -300,6 +401,15 @@ class AccountController extends AbstractController
      */
     public function listUser(UsersRepository $repo, RoleRepository $roleRepository)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $roleList = $roleRepository->findPublicRole();
         $users = $repo->findCivil('Employe');
         return $this->render('account/listUser.html.twig', [
@@ -317,6 +427,15 @@ class AccountController extends AbstractController
      */
     public function addRoleUser(Users $users, Request $request, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $getParam = $request->query->get('title');
         if ( $getParam == 'Employe' or $getParam == 'Civil') {
             $this->addFlash(
@@ -341,6 +460,15 @@ class AccountController extends AbstractController
      */
     public function removeRoleUser(Users $user, Request $request, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $getParam = $request->query->get('title');
         if ( $getParam == 'Employe' or $getParam == 'Civil') {
             $this->addFlash(
@@ -365,6 +493,15 @@ class AccountController extends AbstractController
      */
     public function removeUser(Users $user, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $manager->remove($user);
         $manager->flush();
         return $this->redirectToRoute('listUser');

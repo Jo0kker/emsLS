@@ -2,7 +2,7 @@
 {% block title %}Gestion rang{% endblock %}
 {% block body %}
     <div class="section row nopadding align-items-stretch topmargin-sm">
-        <div class="col-lg-3 border border-info">
+        <div class="col-lg-4 border border-info">
             <div class="">
                 <h2 class="center mt-3">Ajouter un Rang</h2>
                 {{ form_start(form) }}
@@ -20,9 +20,9 @@
                 {{ form_end(form) }}
             </div>
         </div>
-        <div class="col-lg-6 border border-info">
+        <div class="col-lg-8 border border-info">
             <h2 class="center  mt-3">Liste des Rangs</h2>
-            <table class="table table-hover bg-light">
+            <table class="table table-hover bg-light table-comparison table-bordered">
                 <thead>
                 <tr>
                     <th>Titre</th>
@@ -45,39 +45,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-3 border border-info">
-            <h2 class=" mt-3">Acces menu patron</h2>
-            <div class="btn-group mb-3">
-                <button type="button" class="button-mini btn-secondary dropdown-toggle rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Ajouter rang
-                </button>
-                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                    {% for grade in gradeList %}
-                        <a class="dropdown-item" href="{{ path('addRangAccess', {'id': grade.id}) }}">{{ grade.title }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <table class="table table-hover bg-light">
-                <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for access in menuAccess %}
-                    <tr>
-                        <td>{{ access.title }}</td>
-                        <td>
-                            <a href="{{ path('removeRangAccess', {'id': access.id}) }}" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
     </div>
 
 {% endblock %}

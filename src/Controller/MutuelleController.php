@@ -32,6 +32,15 @@ class MutuelleController extends AbstractController
      */
     public function adminMutuelle(MutuelleRepository $repo, ObjectManager $manager, Request $request)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $mutuelleList = $repo->findAll();
         $mutuelle = new Mutuelle();
         $form = $this->createForm(MutuelleType::class, $mutuelle);
@@ -57,6 +66,15 @@ class MutuelleController extends AbstractController
      */
     public function removeMutuelle(Mutuelle $mutuelle, ObjectManager $manager)
     {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Patron', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
         $manager->remove($mutuelle);
         $manager->flush();
         return $this->redirectToRoute('adminMutuelle');
