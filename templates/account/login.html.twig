@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <section id="content">
+
+        <div class="content-wrap">
+
+            <div class="container clearfix bg-light rounded">
+
+                <div class="accordion accordion-lg divcenter nobottommargin clearfix" style="max-width: 550px;">
+
+                    <div class="acctitle"><i class="acc-closed icon-lock3"></i><i class="acc-open icon-unlock"></i>Connexion medecin</div>
+                    <div class="acc_content clearfix">
+                        {% if hasError %}
+                            <div class="alert alert-danger">Nom d'utilisateur ou mot de passe erroné.</div>
+                        {% endif %}
+                        <form id="login-form" name="login-form" class="nobottommargin" action="{{ path('login') }}" method="post">
+                            <div class="col_full">
+                                <label for="login-form-username">Login :</label>
+                                <input type="text" id="login-form-username" name="_username" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full">
+                                <label for="login-form-password">Mot de passe :</label>
+                                <input type="password" id="login-form-password" name="_password" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" value="login">Connexion</button>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+{% endblock %}

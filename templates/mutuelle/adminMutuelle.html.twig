@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+{% block title %}Administration mutuelle{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-lg-5 text-xl-center bg-light border">
+            <h2 class="center">Ajouter une mutuelle</h2>
+            {{ form_start(form) }}
+            <div class="form-group mx-sm-3 mb-2">
+                <label>Nom</label>
+                {{ form_widget(form.nom) }}
+                {{ form_errors(form.nom) }}
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label>Slogan </label>
+                {{ form_widget(form.slogan) }}
+                {{ form_errors(form.slogan) }}
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label>Description </label>
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label>Prix </label>
+                {{ form_widget(form.prix) }}
+                {{ form_errors(form.prix) }}
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label>Nombre intervention compris </label>
+                {{ form_widget(form.nbInter) }}
+                {{ form_errors(form.nbInter) }}
+            </div>
+            <button type="submit" class="btn btn-primary mx-sm-3 mb-2">Crée mutuelle</button>
+            {{ form_end(form) }}
+        </div>
+        <div class="col-lg-7 bg-light border">
+            <h2 class="center">Liste des mutuelles</h2>
+            <table class="table table-hover bg-light">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Nombre d'intervention</th>
+                    <th>Nombre d'adhérant</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for mutuelle in mutuelleList %}
+                    <tr>
+                        <td>{{ mutuelle.nom }}</td>
+                        <td>{{ mutuelle.prix }}</td>
+                        <td>{{ mutuelle.nbInter }}</td>
+                        <td>{{ mutuelle.users|length }}</td>
+                        <td>
+                            <a href="{{ path('removeMutuelle', {'id': mutuelle.id}) }}" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listing patients{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="fancy-title title-dotted-border title-center">
+            <h3 class="bg-transparent">Registre des patients</h3>
+        </div>
+        <div class="row justify-content-center align-items-baseline">
+            <div class="input-group md-form form-sm form-2 pl-0 mt-3 col-md-5">
+                <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+            <span class="input-group-text red lighten-3" id="basic-text1">
+                <i class="fas fa-search text-grey" aria-hidden="true"></i>
+            </span>
+                </div>
+            </div>
+            <a href="{{ path('addBdd') }}" class="button button-3d button-rounded button-blue col-md-4 text-center"><i class="icon-plus1"></i><i class="icon-book3"></i>Ajouter un dossier</a>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <table class="table table-hover bg-transparent  table-bordered table-info table-comparison">
+            <thead>
+            <tr>
+                <th>Nom prenom</th>
+                <th>Téléphone</th>
+                <th>Métier</th>
+                <th>Mutuelle</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for client in clientList %}
+                <tr>
+                    <td>{{ client.fullName }}</td>
+                    <td>{{ client.tel }}</td>
+                    <td>{{ client.emploi }}</td>
+                    <td>{{ client.mutuelle.nom }}</td>
+                    <td>
+                        <a href="{{ path('show_bdd', {'id': client.id}) }}" class="button button-mini button-border button-rounded button-blue"><i class="icon-search2"></i>Voir dossier</a>
+                        {% if 'Patron' in app.user.roles %}
+                            <a href="" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

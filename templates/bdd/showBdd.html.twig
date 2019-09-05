@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+{% block title %}Fiche de {{ client.fullName }}{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="heading-block noborder">
+            <h3>{{ client.nom }}</h3>
+            <span>{{ client.prenom }}</span>
+        </div>
+
+        <div class="clear"></div>
+
+        <div class="row clearfix">
+
+            <div class="col-lg-12">
+
+                <div class="tabs tabs-alt clearfix ui-tabs ui-corner-all ui-widget ui-widget-content" id="tabs-profile">
+
+                    <ul class="tab-nav clearfix ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header" role="tablist">
+                        <li role="tab" tabindex="0" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active ui-state-active" aria-controls="tab-feeds" aria-labelledby="ui-id-1" aria-selected="true" aria-expanded="true"><a href="#tab-feeds" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-1"><i class="icon-rss2"></i> Info perso</a></li>
+                        <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tab-posts" aria-labelledby="ui-id-2" aria-selected="false" aria-expanded="false"><a href="#tab-posts" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-2"><i class="icon-pencil2"></i> Mutuelle</a></li>
+                        <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tab-replies" aria-labelledby="ui-id-3" aria-selected="false" aria-expanded="false"><a href="#tab-replies" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-3"><i class="icon-reply"></i> Intervention</a></li>
+                        <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tab-connections" aria-labelledby="ui-id-4" aria-selected="false" aria-expanded="false"><a href="#tab-connections" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-4"><i class="icon-users"></i> Nouvelle Intervention</a></li>
+                    </ul>
+
+                    <div class="tab-container">
+
+                        <div class="tab-content clearfix ui-tabs-panel ui-corner-bottom ui-widget-content" id="tab-feeds" aria-labelledby="ui-id-1" role="tabpanel" aria-hidden="false" style="">
+                            <div class="container ml-5 mr-5">
+                                <div class="row">
+                                    <h4 class="col"><span>Nom : </span>{{ client.nom }}</h4>
+                                    <h4 class="col"><span>Prenom : </span>{{ client.prenom }}</h4>
+                                    <h4 class="col"><span>Téléphone : </span>{{ client.tel }}</h4>
+                                    <h4 class="col"><span>Date de naissance : </span>{{ client.birthDate }}</h4>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <h4 class="col"><span>Adresse : </span>{{ client.adress }}</h4>
+                                    <h4 class="col"><span>Emploi : </span>{{ client.emploi }}</h4>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <h4 class="col"><span>Observation : </span>{{ client.obs }}</h4>
+                                    <h4 class="col"><span>Habilitation PPA : </span>{% if client.ppa == 1 %}Oui{% else %}Non{% endif %}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content clearfix ui-tabs-panel ui-corner-bottom ui-widget-content" id="tab-posts" aria-labelledby="ui-id-2" role="tabpanel" aria-hidden="true" style="display: none;">
+                            <div class="container ml-5 mr-5">
+                                <div class="row">
+                                    <h4 class="col"><span>Mutuelle : </span>{{ client.mutuelle.nom }}</h4>
+                                    <h4 class="col"><span>Intervention réstante : </span>{{ client.nbInter }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content clearfix ui-tabs-panel ui-corner-bottom ui-widget-content" id="tab-replies" aria-labelledby="ui-id-3" role="tabpanel" aria-hidden="true" style="display: none;">
+                            {% for inter in client.interventions %}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">Le {{ inter.createdAt|date('d/m/Y') }} à {{ inter.createdAt|date('H:i') }} par <span style="color: sandybrown">{{ inter.user.fullName }}</span></p>
+                                    </div>
+                                    <div class="card-footer container">
+                                        <div class="row">
+                                            <h4 class="col"><span>Constatation : </span>{{ inter.constatation }}</h4>
+                                            <h4 class="col"><span>Type d'intervention : </span>{{ inter.typeInter }}</h4>
+                                        </div>
+                                        <div class="row">
+                                            <h4 class="col"><span>Soin appliquée : </span>{{ inter.soinAppli }}</h4>
+                                            <h4 class="col"><span>Prix : </span>{% if inter.soinCover == true %}Pris en charge par la mutuelle{% else %}{{ inter.prix }}{% endif %}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="tab-content clearfix ui-tabs-panel ui-corner-bottom ui-widget-content" id="tab-connections" aria-labelledby="ui-id-4" role="tabpanel" aria-hidden="true" style="display: none;">
+
+                            {{ form_start(form) }}
+                            <div class="col_two_third">
+                                <label for="template-medical-name">Type d'intervention :</label>
+                                {{ form_widget(form.typeInter) }}
+                                {{ form_errors(form.typeInter) }}
+                            </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-phone">Constatation :</label>
+                                {{ form_widget(form.constatation) }}
+                                {{ form_errors(form.constatation) }}
+                            </div>
+                            <div class="clear"></div>
+                            <div class="col_two_third">
+                                <label for="template-medical-email">Soin appliqué :</label>
+                                {{ form_widget(form.soinAppli) }}
+                                {{ form_errors(form.soinAppli) }}
+                            </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-dob">Soin prix en charge par mutuelle :</label>
+                                {{ form_widget(form.soinCover) }}
+                                {{ form_errors(form.soinCover) }}
+                            </div>
+                            <div class="col_three_fifth nobottommargin">
+                                <label for="template-medical-appoint-date">Prix (si non pris en charge) :</label>
+                                {{ form_widget(form.prix) }}
+                                {{ form_errors(form.prix) }}
+                            </div>
+                            <div class="col_full topmargin-sm mt-3">
+                                <button class="button button-rounded button-white button-light nomargin" type="submit">Enregistrer intervention</button>
+                            </div>
+                            {{ form_end(form) }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

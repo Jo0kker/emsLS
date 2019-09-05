@@ -1,42 +1,59 @@
-<header id="header">
-
+{% set route = app.request.attributes.get('_route') %}
+<header id="header" class="bg-transparent ">
     <div id="header-wrap">
-
-        <div class="container clearfix">
-
+        <div class="container-fluid clearfix">
             <div id="primary-menu-trigger"><i class="icon-reorder"></i></div>
-
-            <!-- Logo
-            ============================================= -->
             <div id="logo">
                 <a href="{{ path('homepage') }}" class="standard-logo"><img src="/img/logo.png" alt="Logo EMS"></a>
                 <a href="{{ path('homepage') }}" class="retina-logo"><img src="/img/logo.png" alt="Logo EMS"></a>
-            </div><!-- #logo end -->
-
-            <!-- Primary Navigation
-            ============================================= -->
+            </div>
             <nav id="primary-menu" class="style-3">
+                <ul class="align-content-center justify-content-center align-center">
+                    <li class="{% if route == 'homepage' %}current{% endif %}"><a href="{{ path('homepage') }}"><div>Acceuil</div></a></li>
+                    <li class="{% if route == 'mutuelle' %}current{% endif %}"><a href="{{ path('mutuelle') }}"><div>Mutuelles</div></a></li>
+                    {% if app.user %}
+                        <li class="{% if route == 'bdd_index' or route == 'addBdd' or route == 'show_bdd' %}current{% endif %}"><a href="{{ path('bdd_index') }}"><div>Dossier patient</div></a></li>
 
-                <ul>
-                    <li class="current"><a href="#"><div>Acceuil</div></a></li>
-                    <li><a href="demos/medical/about-us.html"><div>About Us</div></a></li>
-                    <li><a href="demos/medical/departments.html"><div>Departments</div></a></li>
-                    <li><a href="demos/medical/appointment.html"><div>Appointment</div></a></li>
-                    <li><a href="demos/medical/doctors.html"><div>Doctors</div></a>
-                        <ul>
-                            <li><a href="demos/medical/doctors-lists.html"><div>2 columns - List style</div></a></li>
-                            <li><a href="demos/medical/doctors-3.html"><div>3 columns</div></a></li>
-                            <li><a href="demos/medical/doctors.html"><div>4 columns</div></a></li>
-                        </ul>
-                    </li>
-                    <li><a href="demos/medical/blog.html"><div>Blog</div></a></li>
-                    <li><a href="demos/medical/contact.html"><div>Contact</div></a></li>
+                        <li class="nav-item dropdown {% if route == 'meetList' or route == 'listUser' %}current{% endif %}">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">Menu employe </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                                <a class="dropdown-item {% if route == 'meetList' %}active{% endif %}" href="{{ path('meetList') }}">Les demandes de rendez-vous</a>
+                                <a class="dropdown-item {% if route == 'listUser' %}active{% endif %}" href="{{ path('listUser') }}">Membre de l'hopital</a>
+                            </div>
+                        </li>
+                        {% if 'Patron' in app.user.roles %}                                
+                            <li class="nav-item dropdown {% if route == 'userAccess' or route == 'gradeAccess' or route == 'adminMutuelle' %}current{% endif %}">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">Menu patron </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                                    <a class="dropdown-item {% if route == 'userAccess' %}active{% endif %}" href="{{ path('userAccess') }}">Les demandes de compte</a>
+                                    <a class="dropdown-item {% if route == 'gradeAccess' %}active{% endif %}" href="{{ path('gradeAccess') }}">Liste des rangs</a>
+                                    <a class="dropdown-item {% if route == 'adminMutuelle' %}active{% endif %}" href="{{ path('adminMutuelle') }}">Administration mutuelle</a>
+                                </div>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item dropdown {% if route == 'profil' %}current{% endif %}">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">{{ app.user.fullname }} </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="accountDropdownLink">
+                                <a class="dropdown-item {% if route == 'profil' %}active{% endif %}" href="{{ path('profil') }}">Mon profile</a>
+                                <a class="dropdown-item" href="{{ path('logout') }}">Déconnexion</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="{% if route == 'login' %}current{% endif %}"><a href="{{ path('login') }}"><div>Connexion</div></a></li>
+                        <li class="{% if route == 'register' %}current{% endif %}"><a href="{{ path('register') }}"><div>Inscription medecin </div></a></li>
+                    {% endif %}
                 </ul>
-
-            </nav><!-- #primary-menu end -->
-
+            </nav>
         </div>
-
     </div>
+</header>
 
-</header><!-- #header end -->
+{% for label, messages in app.flashes %}
+    <div class="container mt-3">
+        <div class="alert text-center alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message | raw }}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}

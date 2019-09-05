@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block title %}Demande compte{% endblock %}
+{% block body %}
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container clearfix bg-light rounded">
+                <div class="accordion accordion-lg divcenter nobottommargin clearfix" style="max-width: 550px;">
+                    <div class="acctitle"><i class="acc-closed icon-user4"></i><i class="acc-open icon-ok-sign"></i>Inscription, employés uniquement.</div>
+                    <div class="acc_content clearfix">
+                        {{ form_start(form) }}
+                            <div class="col_full">
+                                <label for="register-form-name">Nom :</label>
+                                {{ form_errors(form.nom) }}
+                                {{ form_widget(form.nom) }}
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-name">Prénom :</label>
+                                {{ form_errors(form.prenom) }}
+                                {{ form_widget(form.prenom) }}
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-email">Login :</label>
+                                {{ form_errors(form.login) }}
+                                {{ form_widget(form.login) }}
+                            </div>
+
+                            <div class="col_full">
+                                <label for="register-form-username">Mail (discord) :</label>
+                                {{ form_errors(form.discord) }}
+                                {{ form_widget(form.discord) }}
+                            </div>
+
+                            <div class="col_full">
+                                <label for="register-form-phone">Numero de téléphone :</label>
+                                {{ form_errors(form.tel) }}
+                                {{ form_widget(form.tel) }}
+                            </div>
+
+                            <div class="col_full">
+                                <label for="register-form-password">Mot de passe :</label>
+                                {{ form_errors(form.pwd) }}
+                                {{ form_widget(form.pwd) }}
+                            </div>
+
+                            <div class="col_full">
+                                <label for="register-form-repassword">Confirmation mot de passe :</label>
+                                {{ form_errors(form.confPwd) }}
+                                {{ form_widget(form.confPwd) }}
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" id="register-form-submit" name="register-form-submit" value="register">Envoyer la demande</button>
+                                <h6>Le compte sera ensuite validé par le chef de l'hopital.</h2>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

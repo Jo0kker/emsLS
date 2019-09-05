@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block title %}Acréditation{% endblock %}
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="center">Liste des comptes non validé</h2>
+        <table class="table table-hover bg-light">
+            <thead>
+                <tr>
+                    <th>Date de la demande</th>
+                    <th>Nom prenom</th>
+                    <th>Téléphone</th>
+                    <th>Mail discord</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in usersList %}
+                <tr>
+                    <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ user.fullName }}</td>
+                    <td>{{ user.tel }}</td>
+                    <td>{{ user.discord }}</td>
+                    <td>
+                        <a href="{{ path('grantAccess' , {'id': user.id }) }}" class="button button-mini button-border button-rounded button-green"><i class="icon-ok"></i>Valider</a>
+                        <a href="{{ path('delAccess', {'id': user.id}) }}" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

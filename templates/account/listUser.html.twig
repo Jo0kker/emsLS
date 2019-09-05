@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des Employes{% endblock %}
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="center">Liste des comptes non validé</h2>
+        <table class="table table-hover bg-light">
+            <thead>
+            <tr>
+                <th>Nom prenom</th>
+                <th>Rang</th>
+                <th>Téléphone</th>
+                <th>Mail discord</th>
+                {% if 'Patron' in app.user.roles %}
+                    <th>Action</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in usersList %}
+                <tr>
+                    <td>{{ user.fullName }}</td>
+                    <td>{% for role in user.roles %} <span class="badge badge-info">{{ role }}</span>{% endfor %}</td>
+                    <td>{{ user.tel }}</td>
+                    <td>{{ user.discord }}</td>
+                    {% if 'Patron' in app.user.roles %}    
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="button-mini btn-primary dropdown-toggle rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Ajouter rang
+                                </button>
+                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                    {% for role in roleList %}
+                                        <a class="dropdown-item" href="{{ path('addRoleUser', {'id': user.id, 'title': role.title}) }}">{{ role.title }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="button-mini btn-secondary dropdown-toggle rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Enlever rang
+                                </button>
+                                <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                    {% for role in user.roles %}
+                                        {% if role != 'Employe' %}
+                                        <a class="dropdown-item" href="{{ path('removeRoleUser', {'id': user.id, 'title': role}) }}">{{ role }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <a href="{{ path('removeUser', {'id': user.id}) }}" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

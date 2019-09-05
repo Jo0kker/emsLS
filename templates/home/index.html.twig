@@ -3,5 +3,125 @@
 {% block title %}Page d'acceuil{% endblock %}
 
 {% block body %}
-    <h2> ... </h2>
+    <section id="slider" class="slider-element swiper_wrapper full-screen clearfix" data-loop="true" data-autoplay="5000">
+        <div class="swiper-container swiper-parent">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" style="background-image: url('demos/medical/images/slider/1.jpg');">
+                    <div class="container clearfix">
+                        <div class="slider-caption slider-caption-right" style="max-width: 700px;">
+                            <h2 data-animate="flipInX">Une équipe <span>d'expert</span>.</h2>
+                            <p class="d-none d-sm-block" data-animate="flipInX" data-delay="500">Une équipe à votre écoute qui sera vous aider.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image: url('demos/medical/images/slider/2.jpg');">
+                    <div class="container clearfix">
+                        <div class="slider-caption">
+                            <h2 data-animate="zoomIn">Nous <span>recrutons</span>.</h2>
+                            <p class="d-none d-sm-block" data-animate="zoomIn" data-delay="500">Envie d'aider votre prochain, vous ete serieux. Venez nous rejoindre.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="content-wrap">
+            <div class="container clearfix">
+                <div class="col_one_third">
+                    <div class="feature-box fbox-plain">
+                        <div class="fbox-icon" data-animate="bounceIn">
+                            <a href="#"><i class="icon-medical-i-cardiology"></i></a>
+                        </div>
+                        <h3>Soins intensifs</h3>
+                        <p>Nous vous garentissont le meilleur des soins.</p>
+                    </div>
+                </div>
+                <div class="col_one_third">
+                    <div class="feature-box fbox-plain">
+                        <div class="fbox-icon" data-animate="bounceIn" data-delay="200">
+                            <a href="#"><i class="icon-medical-i-imaging-root-category"></i></a>
+                        </div>
+                        <h3>X-Ray Services</h3>
+                        <p>Des appareils médical à la pointe de la technologie.</p>
+                    </div>
+                </div>
+                <div class="col_one_third col_last">
+                    <div class="feature-box fbox-plain">
+                        <div class="fbox-icon" data-animate="bounceIn" data-delay="400">
+                            <a href="#"><i class="icon-medical-i-ambulance"></i></a>
+                        </div>
+                        <h3>Urgence rapide</h3>
+                        <p>Un service d'urgence le plus rapide qui soit.</p>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <!-- Réservation -->
+            <div class="section row nopadding align-items-stretch dark topmargin-sm">
+                <div class="col-lg-5" style="background: url('demos/medical/images/section-bg.jpg') center center no-repeat; background-size: cover;">
+                    <div>&nbsp;</div>
+                </div>
+                <div class="col-lg-7 nopadding">
+                    <div class="bgcolor form-widget col-padding" data-loader="button">
+                        <h2>Prendre un rendez-vous.</h2>
+                        <div class="form-result"></div>
+                        {{ form_start(form) }}
+                            <div class="col_two_third">
+                                <label for="template-medical-name">Nom :</label>
+                                {{ form_widget(form.nom) }}
+                                {{ form_errors(form.nom) }}
+                            </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-phone">Téléphone :</label>
+                                {{ form_widget(form.tel) }}
+                                {{ form_errors(form.tel) }}
+                            </div>
+                            <div class="clear"></div>
+                            <div class="col_two_third">
+                                <label for="template-medical-email">Prenom :</label>
+                                {{ form_widget(form.prenom) }}
+                                {{ form_errors(form.prenom) }}
+                            </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-dob">Adresse mail (discord) :</label>
+                                {{ form_widget(form.mail) }}
+                                {{ form_errors(form.mail) }}
+                            </div>
+                            <div class="clear"></div>
+                            <div class="col_two_fifth nobottommargin">
+                                <div class="col_full">
+                                    <label for="template-medical-appoint-date">Date de rendez-vous souhaité :</label>
+                                    {{ form_widget(form.meetDate) }}
+                                    {{ form_errors(form.meetDate) }}
+                                </div>
+                                <div class="col_full nobottommargin">
+                                    <label for="template-medical-second-booking">Avez vous déjà un dossier chez nous ?</label><br>
+                                    {{ form_widget(form.record) }}
+                                </div>
+                            </div>
+                            <div class="col_three_fifth nobottommargin col_last">
+                                <label for="template-medical-message">Objet du rendez-vous :</label>
+                                {{ form_widget(form.content) }}
+                                {{ form_errors(form.content) }}
+                            </div>
+                            <div class="clear"></div>
+                            <div class="col_full hidden">
+                                <input type="text" name="template-medical-botcheck" value="" />
+                            </div>
+                            <div class="col_full topmargin-sm">
+                                <button class="button button-rounded button-white button-light nomargin" type="submit">Confirmer la réservation</button>
+                            </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block form_errors %}
+    <li>{{ errors.message }}</li>
 {% endblock %}

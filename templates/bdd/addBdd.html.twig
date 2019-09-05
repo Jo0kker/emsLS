@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}Ajout au registre{% endblock %}
+{% block body %}
+    <div class="container mt-4 bg-light text-center">
+        <div class="fancy-title title-dotted-border title-center">
+            <h3>Nouveau patient</h3>
+        </div>
+
+        {{form_start(form)}}
+            <div class="form-group">
+                <label for="exampleInputEmail1">Nom :</label>
+                {{form_widget(form.nom)}}
+                {{form_errors(form.nom)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Prenom :</label>
+                {{form_widget(form.prenom)}}
+                {{form_errors(form.prenom)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Date de naissance :</label>
+                {{form_widget(form.birthDate)}}
+                {{form_errors(form.birthDate)}}
+            </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Numero de téléphone :</label>
+            {{form_widget(form.tel)}}
+            {{form_errors(form.tel)}}
+        </div>
+        <div class="form-group">
+                <label for="exampleInputEmail1">Adresse :</label>
+                {{form_errors(form.adress)}}
+                {{form_widget(form.adress)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Observation :</label>
+                {{form_errors(form.obs)}}
+                {{form_widget(form.obs)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Emploi :</label>
+                {{form_widget(form.emploi)}}
+                {{form_errors(form.emploi)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Permit de port d'arme :</label>
+                {{form_widget(form.ppa)}}
+                {{form_errors(form.ppa)}}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Mutuelle :</label>
+                {{form_widget(form.mutuelle)}}
+                {{form_errors(form.mutuelle)}}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+        {{form_end(form)}}
+    </div>
+{% endblock %}
