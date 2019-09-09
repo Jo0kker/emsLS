@@ -75,6 +75,7 @@ class MutuelleController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
+
         $manager->remove($mutuelle);
         $manager->flush();
         return $this->redirectToRoute('adminMutuelle');

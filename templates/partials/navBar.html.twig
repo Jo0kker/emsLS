@@ -9,11 +9,11 @@
             </div>
             <nav id="primary-menu" class="style-3">
                 <ul class="align-content-center justify-content-center align-center">
-                    <li class="{% if route == 'homepage' %}current{% endif %}"><a href="{{ path('homepage') }}"><div>Acceuil</div></a></li>
+                    <li class="{% if route == 'homepage' %}current{% endif %}"><a href="{{ path('homepage') }}"><div>Accueil</div></a></li>
                     <li class="{% if route == 'mutuelle' %}current{% endif %}"><a href="{{ path('mutuelle') }}"><div>Mutuelles</div></a></li>
                     {% if app.user %}
                         {% if 'Employe' in app.user.roles %}   
-                            <li class="{% if route == 'bdd_index' or route == 'addBdd' or route == 'show_bdd' %}current{% endif %}"><a href="{{ path('bdd_index') }}"><div>Dossier patient</div></a></li>
+                            <li class="{% if route == 'bdd_index' or route == 'addBdd' or route == 'show_bdd' %}current{% endif %}"><a href="{{ path('bdd_index') }}"><div>Dossiers patient</div></a></li>
 
                             <li class="nav-item dropdown {% if route == 'meetList' or route == 'listUser' %}current{% endif %}">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="accountDropdownLink">Menu employe </a>
