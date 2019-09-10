@@ -13952,7 +13952,5 @@ body:not(.no-transition) #wrapper,
 	background-size: cover; /* version standardisée */
 }
 #footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
+
 }

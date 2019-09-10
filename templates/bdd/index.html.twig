@@ -40,7 +40,7 @@
                     <td>
                         <a href="{{ path('show_bdd', {'id': client.id}) }}" class="button button-mini button-border button-rounded button-blue"><i class="icon-search2"></i>Voir dossier</a>
                         {% if 'Patron' in app.user.roles %}
-                            <a href="" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
+                            <a href="{{ path('delBdd', {'id': client.id}) }}" class="button button-mini button-border button-rounded button-red"><i class="icon-trash2"></i>Supprimer</a>
                         {% endif %}
                     </td>
                 </tr>

@@ -74,6 +74,31 @@ class BddController extends AbstractController
     }
 
     /**
+     * @Route("/delRegistre/{id}", name="delBdd")
+     * @param Clients $clients
+     * @param ObjectManager $manager
+     */
+    public function delBdd(Clients $clients, ObjectManager $manager)
+    {
+        try {
+            $currentRole = $this->getUser()->getRoles();
+        } catch (\Throwable $th) {
+            return $this->redirectToRoute('homepage');
+        }
+        if (!in_array('Employe', $currentRole)) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $inter = $this->getDoctrine()->getManager()->getRepository(Intervention::class)->findBy(['client' => $clients->getId()]);
+        foreach ($inter as $int) {
+        $clients->removeIntervention($int);
+        }
+        $manager->remove($clients);
+        $manager->flush();
+        return $this->redirectToRoute('bdd_index');
+    }
+
+    /**
      * @Route("/show/{id}", name="show_bdd")
      * @param Clients $clients
      * @param Request $request
