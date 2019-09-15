@@ -13951,6 +13951,7 @@ body:not(.no-transition) #wrapper,
 	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
 	background-size: cover; /* version standardisée */
 }
-#footer {
-
+.textAreaInter {
+	max-height: 400px;
+	min-height: 100px;
 }

@@ -6,6 +6,8 @@ use App\Entity\Intervention;
 use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType as TextAreaTypeAlias;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,8 +23,11 @@ class AddInterventionType extends AbstractType
             ->add('constatation', TextType::class, [
                 'attr' => ['class' => 'form-control not-dark']
             ])
-            ->add('soinAppli', TextType::class, [
+            ->add('lieuInter', TextType::class, [
                 'attr' => ['class' => 'form-control not-dark']
+            ])
+            ->add('soinAppli', TextAreaTypeAlias::class, [
+                'attr' => ['class' => 'form-control not-dark textAreaInter']
             ])
             ->add('soinCover', CheckboxType::class, [
                 'label'    => 'Soin couver par la mutuelle',

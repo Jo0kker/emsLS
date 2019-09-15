@@ -43,7 +43,7 @@ class Intervention
     private $constatation;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $soinAppli;
 
@@ -56,6 +56,11 @@ class Intervention
      * @ORM\Column(type="integer", length=255)
      */
     private $prix;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lieuInter;
 
     /**
      * Gère la date de création
@@ -176,6 +181,18 @@ class Intervention
     public function setPrix(string $prix): self
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getLieuInter(): ?string
+    {
+        return $this->lieuInter;
+    }
+
+    public function setLieuInter(string $lieuInter): self
+    {
+        $this->lieuInter = $lieuInter;
 
         return $this;
     }

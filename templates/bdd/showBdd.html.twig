@@ -72,36 +72,39 @@
                                     </div>
                                     <div class="card-footer container">
                                         <div class="row">
-                                            <h4 class="col"><span>Constatation : </span>{{ inter.constatation }}</h4>
+                                            <h4 class="col"><span>Bilan à l'arrivé : </span>{{ inter.constatation }}</h4>
+                                            <h4 class="col"><span>Lieu d'intervention : </span>{{ inter.lieuInter }}</h4>
                                             <h4 class="col"><span>Type d'intervention : </span>{{ inter.typeInter }}</h4>
                                         </div>
                                         <div class="row">
-                                            <h4 class="col"><span>Soin appliquée : </span>{{ inter.soinAppli }}</h4>
-                                            <h4 class="col"><span>Prix : </span>{% if inter.soinCover == true %}Pris en charge par la mutuelle{% else %}{{ inter.prix }}{% endif %}</h4>
+                                            <h4 class="col"><span>Détail des actes pratiqué : </span>{{ inter.soinAppli }}</h4>
+                                            <h4 class="col"><span>Prix : </span>{% if inter.soinCover == true %}Soind pris en charge par la mutuelle{% else %}{{ inter.prix }}{% endif %}</h4>
                                         </div>
                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
                         <div class="tab-content clearfix ui-tabs-panel ui-corner-bottom ui-widget-content" id="tab-connections" aria-labelledby="ui-id-4" role="tabpanel" aria-hidden="true" style="display: none;">
-
                             {{ form_start(form) }}
                             <div class="col_two_third">
                                 <label for="template-medical-name">Type d'intervention :</label>
                                 {{ form_widget(form.typeInter) }}
                                 {{ form_errors(form.typeInter) }}
-                            </div>
-                            <div class="col_one_third col_last">
-                                <label for="template-medical-phone">Constatation :</label>
-                                {{ form_widget(form.constatation) }}
-                                {{ form_errors(form.constatation) }}
-                            </div>
-                            <div class="clear"></div>
-                            <div class="col_two_third">
-                                <label for="template-medical-email">Soin appliqué :</label>
+                                <label for="template-medical-email">Détail des actes pratiqué :</label>
                                 {{ form_widget(form.soinAppli) }}
                                 {{ form_errors(form.soinAppli) }}
                             </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-phone">Bilan à l'arrivé :</label>
+                                {{ form_widget(form.constatation) }}
+                                {{ form_errors(form.constatation) }}
+                            </div>
+                            <div class="col_one_third col_last">
+                                <label for="template-medical-email">Lieu intervention :</label>
+                                {{ form_widget(form.lieuInter) }}
+                                {{ form_errors(form.lieuInter) }}
+                            </div>
+                            <div class="clear"></div>
                             <div class="col_one_third col_last">
                                 <label for="template-medical-dob">Soin prix en charge par mutuelle :</label>
                                 {{ form_widget(form.soinCover) }}
@@ -116,16 +119,11 @@
                                 <button class="button button-rounded button-white button-light nomargin" type="submit">Enregistrer intervention</button>
                             </div>
                             {{ form_end(form) }}
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 {% endblock %}
+
