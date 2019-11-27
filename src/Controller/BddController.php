@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Clients;
 use App\Entity\Mutuelle;
-use App\Entity\Users;
 use App\Form\AddClientType;
 use App\Entity\Intervention;
 use App\Form\AddInterventionType;
 use App\Repository\ClientsRepository;
 use App\Repository\MutuelleRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -19,18 +20,11 @@ class BddController extends AbstractController
 {
     /**
      * @Route("/registre", name="bdd_index")
+     * @param ClientsRepository $repoClients
+     * @return RedirectResponse|Response
      */
     public function index(ClientsRepository $repoClients)
     {
-        try {
-            $currentRole = $this->getUser()->getRoles();
-        } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
-        }
-        if (!in_array('Employe', $currentRole)) {
-            return $this->redirectToRoute('homepage');
-        }
-
         $clientList = $repoClients->findAll();
 
         return $this->render('bdd/index.html.twig', [
@@ -42,19 +36,10 @@ class BddController extends AbstractController
      * @Route("/ajoutRegistre", name="addBdd")
      * @param Request $request
      * @param ObjectManager $manager
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function addBdd(Request $request, ObjectManager $manager)
+    public function addBdd(Request $request, ObjectManager $manager): Response
     {
-        try {
-            $currentRole = $this->getUser()->getRoles();
-        } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
-        }
-        if (!in_array('Employe', $currentRole)) {
-            return $this->redirectToRoute('homepage');
-        }
-
         $client = new Clients();
         $form = $this->createForm(AddClientType::class, $client);
         $form->handleRequest($request);
@@ -77,18 +62,10 @@ class BddController extends AbstractController
      * @Route("/delRegistre/{id}", name="delBdd")
      * @param Clients $clients
      * @param ObjectManager $manager
+     * @return RedirectResponse
      */
     public function delBdd(Clients $clients, ObjectManager $manager)
     {
-        try {
-            $currentRole = $this->getUser()->getRoles();
-        } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
-        }
-        if (!in_array('Employe', $currentRole)) {
-            return $this->redirectToRoute('homepage');
-        }
-
         $inter = $this->getDoctrine()->getManager()->getRepository(Intervention::class)->findBy(['client' => $clients->getId()]);
         foreach ($inter as $int) {
         $clients->removeIntervention($int);
@@ -102,19 +79,12 @@ class BddController extends AbstractController
      * @Route("/show/{id}", name="show_bdd")
      * @param Clients $clients
      * @param Request $request
-     * @param ObjectManager $
+     * @param ObjectManager $manager
+     * @param MutuelleRepository $repoMutuelle
+     * @return RedirectResponse|Response
      */
     public function showBdd(Clients $clients, Request $request, ObjectManager $manager, MutuelleRepository $repoMutuelle)
     {
-        try {
-            $currentRole = $this->getUser()->getRoles();
-        } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
-        }
-        if (!in_array('Employe', $currentRole)) {
-            return $this->redirectToRoute('homepage');
-        }
-
         $medic = $this->getUser();
         $inter = new Intervention();
         $form = $this->createForm(AddInterventionType::class, $inter);
@@ -143,10 +113,10 @@ class BddController extends AbstractController
                         'La mutuelle ne couvre plus d\'intervention pour cette personne'
                     );
                     return $this->redirectToRoute('show_bdd', ['id' => $clients->getId() ]);
-                }else{
-                    //il lui reste des charges, on en enleve une
-                    $clients->setNbInter($interClient - 1);
                 }
+
+                //il lui reste des charges, on en enleve une
+                $clients->setNbInter($interClient - 1);
             }
             $manager->persist($inter);
             $manager->persist($clients);
@@ -162,27 +132,17 @@ class BddController extends AbstractController
 
     /**
      * @Route("/addClientMutuelle/{id}", name="suscription")
-     * @param Users $user
+     * @param Clients $clients
      * @param ObjectManager $manager
      * @param MutuelleRepository $mutuelleRepo
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
-    public function addMutuelle (Clients $clients, ObjectManager $manager, MutuelleRepository $mutuelleRepo, Request $request): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function addMutuelle (Clients $clients, ObjectManager $manager, MutuelleRepository $mutuelleRepo, Request $request): RedirectResponse
     {
-        try {
-            $currentRole = $this->getUser()->getRoles();
-        } catch (\Throwable $th) {
-            return $this->redirectToRoute('homepage');
-        }
-        if (!in_array('Employe', $currentRole)) {
-            return $this->redirectToRoute('homepage');
-        }
-
-
         $getParam = $request->query->get('mutuelle');
         $mutuelleList = $mutuelleRepo->findOneBy(['nom' => $getParam]);
-        if (empty($mutuelleList)) {
+        if ($mutuelleList === null) {
             $this->addFlash(
                 'warning',
                 'Mutuelle introuvable'
@@ -199,5 +159,18 @@ class BddController extends AbstractController
         $manager->persist($clients);
         $manager->flush();
         return $this->redirectToRoute('show_bdd', ['id'=> $clients->getId()]);
+    }
+
+    /**
+     * @Route("/modifier/{id}", name="mod_bdd")
+     * @param Clients $clients
+     * @param ObjectManager $manager
+     * @param Request $request
+     */
+    public function modifBdd(Clients $clients, ObjectManager $manager, Request $request)
+    {
+        //récupération du client en cour de visualisation pour son idition
+        // envoi du formulaire avec les info courrante de la personne pour édition
+        // récupération du formulaire en enregistrement des modification
     }
 }
